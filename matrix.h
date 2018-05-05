@@ -181,12 +181,12 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
         Matrix(void)    //konstruktor
         {
             std::vector<type> temp;
-            temp.push_back(0);
+            temp.push_back(0);  //size zawsze wiekszy o 1 i wspolrzedne wektorow "wewnetrzych" zawsze przesuniete o 1
             this->push_back(temp);
             return;
         }
 
-        /*~Matrix(void)   //destruktor
+        /*~Matrix(void)   //destruktor (u mnie dziala ale na szkolnym nie :( )
         {
             int i;
             for(i=0;i<this->size();i++) //niszczymy kazdy wektor wewnetrzny

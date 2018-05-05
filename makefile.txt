@@ -1,11 +1,9 @@
 all: Matrix run clean
 
-Matrix: main.o Matrix.o
-	g++ main.o Matrix.o -o Matrix
+Matrix: main.o
+	g++ main.o -o Matrix
 main.o: main.cpp
 	g++ -c main.cpp
-to.o: Matrix.h
-	g++ -c Matrix.h
 clean:
 	rm -rf *.o
 run:

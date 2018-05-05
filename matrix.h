@@ -186,7 +186,7 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
             return;
         }
 
-        ~Matrix(void)   //destruktor
+        /*~Matrix(void)   //destruktor
         {
             int i;
             for(i=0;i<this->size();i++) //niszczymy kazdy wektor wewnetrzny
@@ -194,7 +194,7 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
                 this->at(i).~vector();
             }
             this->clear();  //i zedwnetrzny
-        }
+        }*/
 
         void init(void) //utworzenie nowego wiersza (z jakiegos powodu callowanie konstruktora nie dzialalo)
         {

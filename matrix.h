@@ -9,8 +9,6 @@
 template <typename type>
 class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::vector
 {
-    private:
-        type save;  //potrzebne do zapisywania
     public:
         template <typename T>
         friend std::istream &operator>> (std::istream &input, Matrix<T> &matrix);   //wczytanie z cin
@@ -18,24 +16,26 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
 		template <typename T>
 		friend std::ostream &operator<< (std::ostream &output, Matrix<T> &matrix);   //wypisanie do cout
 
-        void adapt(int y, int x)
+        void adapt(int y, int x)    //wypelnienie macierzy losowymi wartosciami
         {
-            int i,j;
-            srand(time(NULL));
+            type save;
+            int i,j;    //countery
+            srand(time(NULL));  //seed
             for(j=0;j<y;j++)
             {
                 for(i=0;i<x;i++)
                 {
-                    this->save=rand()/rand();
-                    this->at(j).push_back(this->save);
+                    save=rand();    //dana losowa
+                    this->at(j).push_back(save);    //zapisywanie
                 }
-                this->init();
+                this->init();   //nowy wiersz
             }
         }
 
         template <typename T>
         Matrix<T> operator+ (Matrix<T> &matrix) //dodawanie
         {
+            T save;
             Matrix<T> blank;    //na tym pracujemy
             if((this->size()!=matrix.size())||(this->at(0).size()!=matrix[0].size())) return blank; //jezeli zle wymiary
             int j,i;    //countery
@@ -43,8 +43,8 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
             {
                 for(i=1;i<this->at(0).size();i++)   //wewnetrzny wektor (na pozycji 0 zawsze sa 0)
                 {
-                    blank.save=this->at(j).at(i)+matrix[j][i];
-                    (blank[j]).push_back(blank.save);   //zapisanie
+                    save=this->at(j).at(i)+matrix[j][i];
+                    (blank[j]).push_back(save);   //zapisanie
                 }
                 blank.init();   //nowy wiersz
             }
@@ -54,6 +54,7 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
         template <typename T>
         Matrix<T> operator* (Matrix<T> &matrix) //mnozenie
         {
+            T save;
             Matrix<T> blank;    //na tym pracujemy
             if((this->at(0).size()!=matrix.size())) return blank;   //zle wymiary
             int j,i,n;  //countery
@@ -66,8 +67,8 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
                     {
                         sum+=matrix[n-1][i]*this->at(j).at(n);  //to zapiszemy
                     }
-                    blank.save=sum;
-                    (blank[j]).push_back(blank.save);   //zapisujemy
+                    save=sum;
+                    (blank[j]).push_back(save);   //zapisujemy
                 }
                 blank.init();   //nowy wiersz
             }
@@ -77,6 +78,7 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
         template <typename T>
         Matrix<T> operator*= (Matrix<T> &matrix)    //analogicznie do *
         {
+            T save;
             Matrix<T> blank;
             if((this->at(0).size()!=matrix.size())) return blank;
             int j,i,n;
@@ -89,8 +91,8 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
                     {
                         sum+=matrix[n-1][i]*this->at(j).at(n);
                     }
-                    blank.save=sum;
-                    (blank[j]).push_back(blank.save);
+                    save=sum;
+                    (blank[j]).push_back(save);
                 }
                 blank.init();
             }
@@ -101,6 +103,7 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
         template <typename T>
         Matrix<T> operator- (Matrix<T> &matrix) //analogicznie do +
         {
+            T save;
             Matrix<T> blank;
             if((this->size()!=matrix.size())||(this->at(0).size()!=matrix[0].size())) return blank;
             int j,i;
@@ -108,8 +111,8 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
             {
                 for(i=1;i<this->at(0).size();i++)
                 {
-                    blank.save=this->at(j).at(i)-matrix[j][i];
-                    (blank[j]).push_back(blank.save);
+                    save=this->at(j).at(i)-matrix[j][i];
+                    (blank[j]).push_back(save);
                 }
                 blank.init();
             }
@@ -178,6 +181,19 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
             return false;
         }
 
+        template <typename T>
+        Matrix<T> operator=(Matrix<T> &matrix)
+        {
+            Matrix<T> blank;
+            if((this->size()!=matrix.size())||(this->at(0).size()!=matrix[0].size())) return blank;
+            int i;
+            for(i=0;i<this->size();i++)
+            {
+                this->at(i)=matrix.at(i);
+            }
+            return *this;
+        }
+
         Matrix(void)    //konstruktor
         {
             std::vector<type> temp;
@@ -186,7 +202,35 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
             return;
         }
 
-        /*~Matrix(void)   //destruktor (u mnie dziala ale na szkolnym nie :( )
+        template<size_t x, size_t y>    //rozmiary tablic
+        Matrix(type (&arr)[x][y])   //konstruktor
+        {
+            int i,j;    //countery
+            this->init();   //tworzymy miejsce
+            for(j=0;j<x;j++)
+            {
+                for(i=0;i<y;i++)
+                {
+                    this->at(j).push_back(arr[j][i]);   //zapisujemy
+                }
+                this->init();   //tworzymy miejsce
+            }
+            return;
+        }
+
+        Matrix(Matrix<type> &matrix)    //konstruktor kopiujacy
+        {
+            this->init();   //tworzymy miejsce
+            int i;  //counter
+            for(i=0;i<matrix.size()-1;i++)
+            {
+                this->at(i)=matrix.at(i);   //przypisujemy vectory
+                this->init();   //tworzymy miejsce
+            }
+            return;
+        }
+
+        ~Matrix(void)   //destruktor (u mnie dziala ale na szkolnym nie :( )
         {
             int i;
             for(i=0;i<this->size();i++) //niszczymy kazdy wektor wewnetrzny
@@ -194,7 +238,7 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
                 this->at(i).~vector();
             }
             this->clear();  //i zedwnetrzny
-        }*/
+        }
 
         void init(void) //utworzenie nowego wiersza (z jakiegos powodu callowanie konstruktora nie dzialalo)
         {
@@ -226,6 +270,7 @@ template <typename type>
 istream &operator>>(istream &input, Matrix<type> &matrix)   //wczytanie z cin
 {
     int crdy, flag, read;
+    type save;
     crdy=read=flag=0;
     do
     {
@@ -237,15 +282,15 @@ istream &operator>>(istream &input, Matrix<type> &matrix)   //wczytanie z cin
                 fseek(stdin, 0, SEEK_END);
                 break;
             }
-            input>>matrix.save;
-            (matrix[crdy]).push_back(matrix.save);
+            input>>save;
+            (matrix[crdy]).push_back(save);
             read++;
         }
         while(input.get()!='\n');	//jezeli enter, przechodzimy do nizszej kolumny
         while ((read!=flag)&&(flag!=0))
         {
-            matrix.save=0;
-            (matrix[crdy]).push_back(matrix.save);
+            save=0;
+            (matrix[crdy]).push_back(save);
             read++;
         }
         crdy++;

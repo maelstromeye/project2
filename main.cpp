@@ -14,7 +14,8 @@ int main()
     int arr[3][3] {{2,3,4},{2,4,6},{7,3,1}};
     Matrix<int> mat(arr);
     cout<<mat;
-    Matrix<int> mat2(mat);
+    Matrix<int> mat2;
+    mat2=mat;
     cout<<mat2;
     string command;
     while(1)

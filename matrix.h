@@ -184,12 +184,13 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
         template <typename T>
         Matrix<T> operator=(Matrix<T> &matrix)
         {
-            Matrix<T> blank;
-            if((this->size()!=matrix.size())||(this->at(0).size()!=matrix[0].size())) return blank;
+            this->clear();
+            this->init();
             int i;
-            for(i=0;i<this->size();i++)
+            for(i=0;i<matrix.size()-1;i++)
             {
                 this->at(i)=matrix.at(i);
+                this->init();
             }
             return *this;
         }

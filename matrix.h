@@ -25,7 +25,7 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
             {
                 for(i=0;i<x;i++)
                 {
-                    save=rand();    //dana losowa
+                    save=rand()/rand();    //dana losowa
                     this->at(j).push_back(save);    //zapisywanie
                 }
                 this->init();   //nowy wiersz
@@ -181,16 +181,16 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
             return false;
         }
 
-        template <typename T>
+        template <typename T>   //operator przypisania
         Matrix<T> operator=(Matrix<T> &matrix)
         {
-            this->clear();
-            this->init();
-            int i;
+            this->clear();  //czyscimy to co bylo
+            this->init();   //robimy miejsce
+            int i;  //counter
             for(i=0;i<matrix.size()-1;i++)
             {
-                this->at(i)=matrix.at(i);
-                this->init();
+                this->at(i)=matrix.at(i);   //przypisujemy
+                this->init();   //robimy miejsce
             }
             return *this;
         }
@@ -236,7 +236,7 @@ class Matrix : public std::vector<std::vector<type> >   //dziedziczenie z std::v
             int i;
             for(i=0;i<this->size();i++) //niszczymy kazdy wektor wewnetrzny
             {
-                this->at(i).~vector();
+                this->at(i).clear();
             }
             this->clear();  //i zedwnetrzny
         }
@@ -270,33 +270,33 @@ using namespace std;
 template <typename type>
 istream &operator>>(istream &input, Matrix<type> &matrix)   //wczytanie z cin
 {
-    int crdy, flag, read;
-    type save;
+    int crdy, flag, read;   //licznik wspolrzednej y, flaga, ilosc wczytanych rzeczy
+    type save;  //sluzy do zapisywania danych
     crdy=read=flag=0;
     do
     {
         do
         {
-            if((flag!=0)&&(read==flag))
+            if((flag!=0)&&(read==flag)) //ktos chce za duzo wpisac
             {
                 cout<<"cut"<<endl;
-                fseek(stdin, 0, SEEK_END);
+                fseek(stdin, 0, SEEK_END);  //obcinamy
                 break;
             }
-            input>>save;
+            input>>save;    //zapisujemy
             (matrix[crdy]).push_back(save);
-            read++;
+            read++; //przeczytano
         }
         while(input.get()!='\n');	//jezeli enter, przechodzimy do nizszej kolumny
-        while ((read!=flag)&&(flag!=0))
+        while ((read!=flag)&&(flag!=0)) //za malo ktos wpisal
         {
             save=0;
-            (matrix[crdy]).push_back(save);
+            (matrix[crdy]).push_back(save); //zapisujemy 0
             read++;
         }
-        crdy++;
-        matrix.init();
-        flag=read;
+        crdy++; //nastepna wspolrzedna
+        matrix.init();  //robimy miejsce
+        flag=read;  //maksymalny wymiar
         read=0;
     }
     while(input.peek()!='\n');
@@ -306,14 +306,14 @@ istream &operator>>(istream &input, Matrix<type> &matrix)   //wczytanie z cin
 template <typename type>
 ostream &operator<<(ostream &output, Matrix<type> &matrix)   //wypisanie do cout
 {
-    int i,j;
+    int i,j;    //countery
     for(j=0;j<matrix.size()-1;j++)
     {
         for(i=1;i<(matrix[0]).size();i++)
         {
-            output<<matrix[j][i]<<' ';
+            output<<matrix[j][i]<<' ';  //wypisanie
         }
-        output<<endl;
+        output<<endl;   //newline
     }
     return output;
 }

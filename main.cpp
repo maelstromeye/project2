@@ -9,6 +9,13 @@ template <typename type>
 void adapt(Matrix<type> &matrix, int y, int x);
 int change(void);
 int next(int x);
+void key()
+{
+    cout<<"Press enter to continue"<<endl;
+    cin.get();
+    fseek(stdin,0,SEEK_END);
+    return;
+}
 int main()
 {
     int arr[3][3] {{2,3,4},{2,4,6},{7,3,1}};
@@ -63,45 +70,60 @@ bool general_test(void)
     cout<<"Please input a matrix"<<endl;
     cin>>matrices[0];
     cout<<"Input...ok"<<endl;
-    cout<<matrices[0]<<endl<<"Output...ok"<<endl<<"Randomizing matrix 2 with "<<matrices[0].size()-1<<"x"<<matrices[0][0].size()-1<<" dimensions"<<endl;
+    cout<<matrices[0]<<endl<<"Output...ok"<<endl;
+    key();
+    cout<<"Randomizing matrix 2 with "<<matrices[0].size()-1<<"x"<<matrices[0][0].size()-1<<" dimensions"<<endl;
     matrices[1].adapt(matrices[0].size()-1, matrices[0][0].size()-1);
     cout<<matrices[1];
+    key();
     cout<<"Comparing 2 matrices"<<endl;
     if (matrices[0]!=matrices[0]) {cout<<"Comparison fail... Aborting..."<<endl; return false;}
     if (!(matrices[0]==matrices[0])) {cout<<"Comparison fail... Aborting..."<<endl; return false;}
     if (matrices[0]==matrices[1]) cout<<"Matrices equal, comparison ok"<<endl;
     else cout<<"Matrices not equal, comparison ok"<<endl;
+    key();
     cout<<"Adding both matrices"<<endl;
     matrices[2]=matrices[0]+matrices[1];
     cout<<matrices[2];
+    key();
     cout<<"Adding with assignment"<<endl;
     matrices[0]+=matrices[1];
     cout<<matrices[0];
+    key();
     if (matrices[0]==matrices[2]) cout<<"Simple maths...ok"<<endl;
     else {cout<<"Simple maths fail... Aborting..."<<endl; return false;}
+    key();
     cout<<"Generating random matrix multipliable by the one above..."<<endl;
     matrices[3].adapt(matrices[0][0].size()-1, matrices[0].size()-1);
     cout<<matrices[3];
+    key();
     cout<<"Multiplying matrices..."<<endl;
     matrices[2]=matrices[0]*matrices[3];
     cout<<matrices[2];
+    key();
     cout<<"Multiplying with assignment..."<<endl;
     matrices[0]*=matrices[3];
     cout<<matrices[0];
+    key();
     if (matrices[0]==matrices[2]) cout<<"Multiplication...ok"<<endl;
     else {cout<<"Multiplication fail... Aborting..."<<endl; return false;}
+    key();
     cout<<"Testing accessing and changing elements... Access element of matrix 1:"<<endl;
     cout<<matrices[0];
     i=rand()%(matrices[0][0].size()-1);
     j=rand()%(matrices[0].size()-1);
     cout<<"At:("<<j<<","<<i<<")"<<endl<<matrices[0].reveal(i,j)<<endl;
+    key();
     if(matrices[0].reveal(i,j)!=matrices[0].at(j).at(i+1)) {cout<<"Access fail... Aborting..."<<endl; return false;}
     else cout<<"Access...ok"<<endl;
+    key();
     n=rand()/rand();
     cout<<"Changing element at ("<<j<<","<<i<<") of matrix 1 to: "<<n<<endl;
     matrices[0].change(i,j,n);
+    key();
     cout<<"Matrix 1 is now:"<<endl;
     cout<<matrices[0];
+    key();
     if (matrices[0].reveal(i,j)!=n) {cout<<"Element change fail... Aborting..."<<endl; return false;}
     else cout<<"Element change...ok"<<endl;
     cout<<"All matrix functions operational"<<endl;

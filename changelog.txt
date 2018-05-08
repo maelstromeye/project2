@@ -1,0 +1,7 @@
+ver 1.1
+-dodano komentarze do metod gdzie ich brakowalo
+-destruktor powinien juz dzialac wszedzie
+-dwa konstruktory (kopiujacy i niepusty, wykorzystujacy dwuwymiarowe tablice)
+-dana zmienna prywatna Matrix.save zastapiona lokalnymi zmiennymi odpowiedniego typu w pewnych metodach ktore tego wymagaly
+-do testu zaaplikowano pauzy, powinien byc mniej chaotyczny
+-dla klasy zoverloadowano operator=
